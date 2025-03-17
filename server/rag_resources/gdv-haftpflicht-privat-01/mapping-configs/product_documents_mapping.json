@@ -1,0 +1,76 @@
+{
+  "productKey": "gdv-haftpflicht-privat-01",
+  "domainsOfInterest": {
+    "contracts": [
+      {
+        "contractKey": "privathaftpflicht",
+        "relatedDocuments": [
+          {
+            "documentId": "2025v1_avb_private_haftpflichtversicherung",
+            "versions": []
+          }
+        ]
+      },
+      {
+        "contractKey": "haus_und_grundbesitzer",
+        "relatedDocuments": [
+          {
+            "documentId": "2025v1_avb_private_haus_grundbesitzer",
+            "versions": []
+          }
+        ]
+      },
+      {
+        "contractKey": "hundehalter",
+        "relatedDocuments": [
+          {
+            "documentId": "2025v1_avb_private_hundehalter",
+            "versions": []
+          }
+        ]
+      },
+      {
+        "contractKey": "gewaesserschaeden",
+        "relatedDocuments": [
+          {
+            "documentId": "2025v1_avb_private_gewaesserschaeden",
+            "versions": []
+          }
+        ]
+      },
+      {
+        "contractKey": "pferdehalter",
+        "relatedDocuments": [
+          {
+            "documentId": "2025v1_avb_private_pferdehalter",
+            "versions": []
+          }
+        ]
+      }
+    ],
+    "contractModules": [
+      {
+        "moduleKey": "dienstrisiko",
+        "relatedDocuments": [
+          {
+            "documentId": "2025v1_avb_phv_zusatzbaustein_diensthaftpflicht",
+            "versions": []
+          }
+        ]
+      }
+    ],
+    "additionalAgreements": [
+    ],
+    "generalDomains": [
+      {
+        "generalDomainKey": "general_contract_terms",
+        "relatedDocuments": [
+          {
+            "documentId": "2025v1_haftpflicht_allgemeiner_teil_vertragliches",
+            "versions": []
+          }
+        ]
+      }
+    ]
+  }
+}

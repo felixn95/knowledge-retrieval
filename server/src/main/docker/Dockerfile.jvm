@@ -1,0 +1,34 @@
+# ----------------------------------
+# 1) Build stage
+# ----------------------------------
+FROM maven:3.9.4-eclipse-temurin-21 AS build
+WORKDIR /workspace
+
+# Copy entire project so Maven sees parent + child poms
+COPY . .
+
+# Download dependencies for the server module (and also build it)
+# -pl means "only build these projects"
+# -am means "build any dependencies of that module as well"
+RUN mvn -pl server -am dependency:go-offline
+RUN mvn -pl server -am package -DskipTests
+
+# ----------------------------------
+# 2) Final image to run the app
+# ----------------------------------
+FROM registry.access.redhat.com/ubi8/openjdk-21:1.20
+
+WORKDIR /deployments
+
+# Copy Quarkus build output from the first stage
+COPY --from=build /workspace/server/target/quarkus-app /deployments/
+
+# Quarkus HTTP port
+EXPOSE 12100
+USER 185
+
+# Quarkus host + jar
+ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0"
+ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
+
+ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]

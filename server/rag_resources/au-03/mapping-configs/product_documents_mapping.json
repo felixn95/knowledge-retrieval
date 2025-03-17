@@ -1,0 +1,71 @@
+{
+  "productKey": "au-03",
+  "domainsOfInterest": {
+    "contracts": [
+      {
+        "contractKey": "AU",
+        "relatedDocuments": [
+          {
+            "documentId": "au-03_AUB_2012",
+            "documentLabel": "Allgemeine Unfallversicherungs-Bedingungen (AUB 2012)",
+            "versions": []
+          }
+        ]
+      }
+    ],
+    "contractModules": [],
+    "additionalAgreements": [
+      {
+        "additionalAgreementKey": "PROGRESSION_350",
+        "relatedDocuments": [
+          {
+            "documentId": "au-03_progression350_v1",
+            "documentLabel": "Progressionsstaffel 350%",
+            "versions": []
+          }
+        ]
+      },
+      {
+        "additionalAgreementKey": "PROGRESSION_500",
+        "relatedDocuments": [
+          {
+            "documentId": "au-03_progression500_v1",
+            "documentLabel": "Progressionsstaffel 500%",
+            "versions": []
+          }
+        ]
+      },
+      {
+        "additionalAgreementKey": "TOPVIT",
+        "relatedDocuments": [
+          {
+            "documentId": "au-03_besondere_bedingungen_TOP-VIT",
+            "documentLabel": "Besondere Bedingungen Paket TOP-VIT",
+            "versions": []
+          }
+        ]
+      },
+      {
+        "additionalAgreementKey": "VIT",
+        "relatedDocuments": [
+          {
+            "documentId": "au-03_besondere_bedingungen_VIT",
+            "documentLabel": "Besondere Bedingungen Paket VIT",
+            "versions": []
+          }
+        ]
+      },
+        {
+            "additionalAgreementKey": "DYNAMIK",
+            "relatedDocuments": [
+            {
+                "documentId": "au-03_dynamik_zusatzbedingungen",
+                "documentLabel": "BB für die Unfallversicherung mit Zuwachs von Leistung und Beitrag",
+                "versions": []
+            }
+            ]
+        }
+    ],
+    "generalDomains": []
+  }
+}

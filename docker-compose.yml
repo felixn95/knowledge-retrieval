@@ -1,0 +1,77 @@
+services:
+  database-postgresql:
+    image: pgvector/pgvector:pg17
+    container_name: pgvector-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: pgvector
+    ports:
+      - "5433:5432"
+    # Use a named volume
+    volumes:
+      - pgvector_data:/var/lib/postgresql/data
+      # init script and dump for initialization
+      - ./postgres/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - database-postgresql
+
+  quarkus-backend:
+    build:
+      context: .
+      dockerfile: ./server/src/main/docker/Dockerfile.jvm
+    container_name: quarkus-backend
+    volumes:
+      - ./server/rag_resources:/app/rag_resources
+
+    env_file:
+      - ./server/.env
+
+    environment:
+      # Database Configuration
+      QUARKUS_DATASOURCE_DB_KIND: postgresql
+      QUARKUS_DATASOURCE_USERNAME: user
+      QUARKUS_DATASOURCE_PASSWORD: password
+      QUARKUS_DATASOURCE_JDBC_URL: "jdbc:postgresql://database-postgresql:5432/pgvector"
+      QUARKUS_DATASOURCE_JDBC_ENABLE_METRICS: "true"
+
+      # Document Base Path
+      DOCUMENTS_BASE_PATH: /app/rag_resources
+
+      # Quarkus HTTP Configuration
+      QUARKUS_HTTP_PORT: "12100"
+      QUARKUS_HTTP_HOST: "0.0.0.0"
+      QUARKUS_HTTP_ROOT_PATH: "/knowledge-retrieval"
+      QUARKUS_HTTP_ACCESS_LOG_ENABLED: "true"
+      QUARKUS_HTTP_ACCESS_LOG_FORMAT: "combined"
+      QUARKUS_HTTP_CORS: "true"
+      QUARKUS_HTTP_CORS_ORIGINS: "*"
+
+      # Logging Configuration
+      QUARKUS_LOG_LEVEL: "INFO"
+      QUARKUS_LOG_CATEGORY__ORG_JBOSS_RESTEASY__LEVEL: "INFO"
+      QUARKUS_LOG_CATEGORY__IO_QUARKUS_RESTEASY__LEVEL: "INFO"
+      QUARKUS_LOG_CATEGORY__ORG_HIBERNATE_SQL__LEVEL: "INFO"
+      QUARKUS_LOG_CATEGORY__IO_QUARKUS_HIBERNATE__LEVEL: "INFO"
+      QUARKUS_DATASOURCE_JDBC_LOG_LEVEL: "INFO"
+
+      # Remote Debugging
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+
+    ports:
+      - "12100:12100"
+      - "5005:5005"
+    depends_on:
+      - database-postgresql
+
+# Declare named volumes here
+volumes:
+  pgvector_data:

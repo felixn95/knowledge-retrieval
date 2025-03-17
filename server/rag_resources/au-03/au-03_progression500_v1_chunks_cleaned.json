@@ -1,0 +1,38 @@
+[
+  {
+    "documentName": "au-03_progression500_v1",
+    "chunkContent": "# Unfallversicherung - VIT / TOP-VIT ## Progressionsstaffel 500%",
+    "globalIndex": 0,
+    "metadata": {
+      "pageNumber": "1",
+      "pageHeader": null,
+      "sourceHeading": "# Unfallversicherung - VIT / TOP-VIT",
+      "chunkIndex": "1_0_0",
+      "globalIndex": 0
+    }
+  },
+  {
+    "documentName": "au-03_progression500_v1",
+    "chunkContent": "### Invaliditätsgrad 1-50 | Invaliditätsgrad % | Leistung in % von der Invaliditäts-Grundsumme | |--------------------|---------------------------------| | 1-25 | 1-25 | | 26 | 30 | | 27 | 35 | | 28 | 40 | | 29 | 45 | | 30 | 50 | | 31 | 55 | | 32 | 60 | | 33 | 65 | | 34 | 70 | | 35 | 75 | | 36 | 80 | | 37 | 85 | | 38 | 90 | | 39 | 95 | | 40 | 100 | | 41 | 105 | | 42 | 110 | | 43 | 115 | | 44 | 120 | | 45 | 125 | | 46 | 130 | | 47 | 135 | | 48 | 140 | | 49 | 145 | | 50 | 150 |",
+    "globalIndex": 1,
+    "metadata": {
+      "pageNumber": "1",
+      "pageHeader": null,
+      "sourceHeading": "### Invaliditätsgrad 1-50",
+      "chunkIndex": "1_1_0",
+      "globalIndex": 1
+    }
+  },
+  {
+    "documentName": "au-03_progression500_v1",
+    "chunkContent": "### Invaliditätsgrad 51-100 | Invaliditätsgrad % | Leistung in % von der Invaliditäts-Grundsumme | |--------------------|---------------------------------| | 51 | 157 | | 52 | 164 | | 53 | 171 | | 54 | 178 | | 55 | 185 | | 56 | 192 | | 57 | 199 | | 58 | 206 | | 59 | 213 | | 60 | 220 | | 61 | 227 | | 62 | 234 | | 63 | 241 | | 64 | 248 | | 65 | 255 | | 66 | 262 | | 67 | 269 | | 68 | 276 | | 69 | 283 | | 70 | 290 | | 71 | 297 | | 72 | 304 | | 73 | 311 | | 74 | 318 | | 75 | 325 | | 76 | 332 | | 77 | 339 | | 78 | 346 | | 79 | 353 | | 80 | 360 | | 81 | 367 | | 82 | 374 | | 83 | 381 | | 84 | 388 | | 85 | 395 | | 86 | 402 | | 87 | 409 | | 88 | 416 | | 89 | 423 | | 90 | 430 | | 91 | 437 | | 92 | 444 | | 93 | 451 | | 94 | 458 | | 95 | 465 | | 96 | 472 | | 97 | 479 | | 98 | 486 | | 99 | 493 | | 100 | 500 |",
+    "globalIndex": 2,
+    "metadata": {
+      "pageNumber": "1",
+      "pageHeader": null,
+      "sourceHeading": "### Invaliditätsgrad 51-100",
+      "chunkIndex": "1_2_0",
+      "globalIndex": 2
+    }
+  }
+]

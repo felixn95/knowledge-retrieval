@@ -1,0 +1,60 @@
+{
+  "productKey": "au-03",
+  "propertyMapping": {
+    "policy": {
+      "attributes": []
+    },
+    "contracts": [
+      {
+        "contractKey": "AU",
+        "label": "Accident Insurance",
+        "attributes": [
+          {
+            "key": "PAKET"
+          }
+        ],
+        "additionalFields": [
+          {
+            "key": "dynamicEnabled"
+          },
+          {
+            "key": "dynamicPercentageRate"
+          }
+        ]
+      }
+    ],
+    "contractModules": [
+      {
+        "moduleKey": "INV",
+        "attributes": [
+          {
+            "key": "VS"
+          },
+          {
+            "key": "PROGRESSION"
+          }
+        ],
+        "additionalFields": []
+      },
+      {
+        "moduleKey": "TOD",
+        "attributes": [
+          {
+            "key": "TODESFALLSUMME"
+          }
+        ],
+        "additionalFields": []
+      },
+      {
+        "moduleKey": "KH_TAGEGELD",
+        "attributes": [
+          {
+            "key": "KH_TAGEGELD_PRO_TAG"
+          }
+        ],
+        "additionalFields": []
+      }
+    ],
+    "generalProperties": []
+  }
+}
