@@ -2,11 +2,12 @@
 <project
         xmlns="http://maven.apache.org/POM/4.0.0"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                        https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Parent POM -->
+    <!-- Parent POM (the multi-module POM you showed above) -->
     <parent>
         <groupId>com.retrieval</groupId>
         <artifactId>knowledge-retrieval</artifactId>
@@ -17,11 +18,6 @@
     <packaging>jar</packaging>
 
     <properties>
-        <maven.deploy.skip>true</maven.deploy.skip>
-        <assembly.skipAssembly>false</assembly.skipAssembly>
-        <enunciate.skip>false</enunciate.skip>
-        <maven.javadoc.skip>false</maven.javadoc.skip>
-
         <quarkus.container-image.group>retrieval</quarkus.container-image.group>
         <quarkus.container-image.name>${project.parent.artifactId}</quarkus.container-image.name>
 
@@ -30,12 +26,11 @@
     </properties>
 
     <dependencies>
-        <!-- If your `client` module is at groupId=com.retrieval, use that here -->
+        <!-- Client module -->
         <dependency>
             <groupId>com.retrieval</groupId>
             <artifactId>knowledge-retrieval-client</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- LangChain4j -->
@@ -66,10 +61,18 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-hibernate-orm</artifactId>
         </dependency>
+
+        <!-- RESTEasy JSON-B is only for JSON serialization; we also need 'quarkus-resteasy' for REST endpoints -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy-jsonb</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-resteasy</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
@@ -83,7 +86,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.34</version>
             <scope>provided</scope>
         </dependency>
 
@@ -102,7 +104,7 @@
 
     <build>
         <plugins>
-            <!-- Ensure the Quarkus plugin is here -->
+            <!-- Quarkus Maven Plugin -->
             <plugin>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
@@ -119,24 +121,20 @@
                 </executions>
             </plugin>
 
-            <!-- Reference the Maven Compiler Plugin so we inherit the annotation-processor config
-                 from the parent's <pluginManagement> block. -->
+            <!-- Compiler Plugin (inherits annotation processor config from parent) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${compiler-plugin.version}</version>
             </plugin>
 
             <!-- Test plugins -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M7</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0-M7</version>
             </plugin>
         </plugins>
     </build>

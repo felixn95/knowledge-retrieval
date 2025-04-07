@@ -8,11 +8,12 @@ services:
       POSTGRES_DB: pgvector
     ports:
       - "5433:5432"
-    # Use a named volume
+    # named volume
     volumes:
       - pgvector_data:/var/lib/postgresql/data
       # init script and dump for initialization
       - ./postgres/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: pgadmin

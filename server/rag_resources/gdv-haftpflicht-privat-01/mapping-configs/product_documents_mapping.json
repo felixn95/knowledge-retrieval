@@ -7,6 +7,7 @@
         "relatedDocuments": [
           {
             "documentId": "2025v1_avb_private_haftpflichtversicherung",
+            "documentLabel": "Allgemeine Versicherungsbedingungen für die private Haftpflichtversicherung",
             "versions": []
           }
         ]
@@ -16,6 +17,7 @@
         "relatedDocuments": [
           {
             "documentId": "2025v1_avb_private_haus_grundbesitzer",
+            "documentLabel": "Allgemeine Versicherungsbedingungen für Haus- und Grundbesitzer",
             "versions": []
           }
         ]
@@ -25,6 +27,7 @@
         "relatedDocuments": [
           {
             "documentId": "2025v1_avb_private_hundehalter",
+            "documentLabel": "Allgemeine Versicherungsbedingungen für Hundehalter",
             "versions": []
           }
         ]
@@ -34,6 +37,7 @@
         "relatedDocuments": [
           {
             "documentId": "2025v1_avb_private_gewaesserschaeden",
+            "documentLabel": "Allgemeine Versicherungsbedingungen für Gewässerschäden",
             "versions": []
           }
         ]
@@ -43,6 +47,7 @@
         "relatedDocuments": [
           {
             "documentId": "2025v1_avb_private_pferdehalter",
+            "documentLabel": "Allgemeine Versicherungsbedingungen für Pferdehalter",
             "versions": []
           }
         ]
@@ -54,19 +59,20 @@
         "relatedDocuments": [
           {
             "documentId": "2025v1_avb_phv_zusatzbaustein_diensthaftpflicht",
+            "documentLabel": "Zusatzbaustein Diensthaftpflichtversicherung",
             "versions": []
           }
         ]
       }
     ],
-    "additionalAgreements": [
-    ],
+    "additionalAgreements": [],
     "generalDomains": [
       {
         "generalDomainKey": "general_contract_terms",
         "relatedDocuments": [
           {
             "documentId": "2025v1_haftpflicht_allgemeiner_teil_vertragliches",
+            "documentLabel": "Allgemeiner Teil der Haftpflichtversicherung – Vertragliches",
             "versions": []
           }
         ]
