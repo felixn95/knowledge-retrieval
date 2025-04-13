@@ -22,7 +22,6 @@ public class KnowledgeRetrievalClient {
 	}
 
 	public WebTarget embeddingResource() {
-		// Adjust path according to your resources
 		return baseTarget.path("tenants")
 				.path(tenantId)
 				.path("embeddings");
