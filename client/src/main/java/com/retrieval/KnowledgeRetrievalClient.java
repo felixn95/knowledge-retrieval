@@ -13,7 +13,6 @@ public class KnowledgeRetrievalClient {
 	private final WebTarget baseTarget;
 	private final String tenantId;
 
-	// Adjust to match your actual context path
 	public static final String CONTEXT_PATH = "/knowledge-retrieval";
 
 	public KnowledgeRetrievalClient(String baseUrl, String tenantId) {

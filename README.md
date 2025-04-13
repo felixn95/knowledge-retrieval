@@ -4,10 +4,14 @@ Thesis Project Master of Science Uni Würzburg.
 
 The module leverages retrieval augmented generation techniques to retrieve relevant context from documents by natural language queries. The approach is based on Quarkus, AzureOpenAI, and the pgvector extension for PostgreSQL.
 
+**Important**: To run the retrieval E2E, place an .env file with your respective AZURE keys in the server repo (https://github.com/felixn95/knowledge-retrieval/blob/main/server/.env).
+
+
 ## Prerequisites
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed.
 - Git installed for cloning the repository.
+- Place an .env file in the root of the server folder with the Azure OpenAI keys
 
 ## Overview
 
