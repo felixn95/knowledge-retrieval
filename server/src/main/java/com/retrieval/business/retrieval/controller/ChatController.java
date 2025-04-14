@@ -15,53 +15,52 @@ import com.retrieval.business.retrieval.util.DocumentChunkMapper;
 import com.retrieval.business.retrieval.util.PromptTemplateProvider;
 
 /**
- * Controller responsible for processing chat requests.
+ * Controller class orchestrating chat requests.
  *
  * @author FelixNeubauer
  */
 @ApplicationScoped
 public class ChatController {
 
-	private static final int DEFAULT_LIMIT = 10;
+	private static final int DEFAULT_LIMIT = 15;
 	private static final DistanceMetric DEFAULT_METRIC = DistanceMetric.COSINE;
 
 	private static final String DE_INVALID_QUERY_MESSAGE = "Bitte stelle nur Fragen mit Bezug zu den entsprechenden Versicherungsbedingungen.";
 	private static final String EN_INVALID_QUERY_MESSAGE = "Please only ask questions related to the corresponding insurance conditions.";
 
 	@Inject
-	VectorSearchService vectorSearchService;
+	private VectorSearchService vectorSearchService;
 
 	@Inject
-	DocumentChunkMapper documentChunkMapper;
+	private DocumentChunkMapper documentChunkMapper;
 
 	@Inject
-	ConversationSessionService conversationSessionService;
+	private ConversationSessionService conversationSessionService;
 
 	@Inject
-	CustomModelProducer customModelProducer;
+	private CustomModelProducer customModelProducer;
 
 	@Inject
-	PromptTemplateProvider promptTemplateProvider;
+	private PromptTemplateProvider promptTemplateProvider;
 
 	@Inject
-	DocumentListController documentListController;
+	private DocumentListController documentListController;
 
 	@Inject
-	ChatResponseBuilder chatResponseBuilder;
+	private ChatResponseBuilder chatResponseBuilder;
 
 	@Inject
-	ChatContextPreparer chatContextPreparer;
+	private ChatContextPreparer chatContextPreparer;
 
 	@Inject
-	DomainsValidator domainsValidator;
+	private DomainsValidator domainsValidator;
 
 	/**
-	 * Processes the incoming chat request by orchestrating query extraction, document search, prompt building, answer
-	 * generation, session update, and response building.
+	 * Processes the incoming chat request
 	 *
-	 * @param request
-	 *     The chat request DTO.
-	 * @return A ChatResponseDTO containing the assistant’s response.
+	 * @param request containing the user's query and context
+	 * @return a {@code ChatResponseDTO}
+	 *
 	 */
 	public ChatResponseDTO processChat(final ChatRequestDTO request) {
 
@@ -76,48 +75,51 @@ public class ChatController {
 				conversationSessionService.getSession(request.getSessionId()),
 				"Conversation session must not be null");
 
-		// Retrieve relevant documents for the scoped domain.
+		// Retrieve the relevant documents for the scoped domain.
 		final Map<String, String> documentsMap = getRelatedDocumentMap(request);
 
 		final QueryLanguage language = request.getContext().getLanguage();
 
-		// Optimize the vector search.
-		final QueryContext queryContext = chatContextPreparer.prepareQueryContext(
-				currentQuery, session, language);
+		// Prepare the query context used to optimize the vector search.
+		final QueryContext queryContext = chatContextPreparer.prepareQueryContext(currentQuery, session, language);
 
-		// filter invalid queries (empty optimized query)
+		// If the optimized query is empty, create an invalid query response and persist the session.
 		if (queryContext.getQueryForVectorSearch().isEmpty()) {
 			final String answer = "";
 			final ChatResponseDTO chatResponse = createInvalidQueryResponse(language);
-			// also persist the invalid query for future analysis
-			conversationSessionService.updateConversation(
-					session, currentQuery, answer, chatResponse, queryContext);
+			conversationSessionService.updateConversation(session, currentQuery, answer, chatResponse, queryContext);
 			conversationSessionService.persistOrUpdateSession(session);
 			return chatResponse;
 		}
 
-		// Search for similar document chunks in vector space.
+		// Perform vector search for similar document chunks.
 		final List<DocumentChunkEntity> similarChunks = vectorSearchService.searchByQuery(
-				queryContext.getQueryForVectorSearch(), documentsMap.keySet().stream().toList(), DEFAULT_LIMIT,
-				DEFAULT_METRIC);
+				queryContext.getQueryForVectorSearch(),
+				documentsMap.keySet().stream().toList(),
+				DEFAULT_LIMIT,
+				DEFAULT_METRIC
+		);
 
 		final List<DocumentChunkDTO> similarChunksDTOs = documentChunkMapper.toDto(similarChunks);
 
-		// enrich the chunks with documentLabel
+		// Enrich document chunks with corresponding document labels.
 		similarChunksDTOs.forEach(chunk -> chunk.setDocumentLabel(documentsMap.get(chunk.getDocumentName())));
 
+		// Build the prompt using the retrieved document chunks and history summary.
 		final String prompt = promptTemplateProvider.buildRagPrompt(
-				currentQuery, similarChunksDTOs, queryContext.getHistorySummary(), language);
+				currentQuery,
+				similarChunksDTOs,
+				queryContext.getHistorySummary(),
+				language
+		);
 
-		final String answer = customModelProducer
-				.produceAzureOpenAiChatModel()
-				.generate(prompt);
+		// Generate an answer using the custom OpenAI chat model.
+		final String answer = customModelProducer.produceAzureOpenAiChatModel().generate(prompt);
 
-		final ChatResponseDTO chatResponse = chatResponseBuilder.buildChatResponse(
-				answer, similarChunksDTOs, session);
+		final ChatResponseDTO chatResponse = chatResponseBuilder.buildChatResponse(answer, similarChunksDTOs, session);
 
-		conversationSessionService.updateConversation(
-				session, currentQuery, answer, chatResponse, queryContext);
+		// Update conversation state and persist session.
+		conversationSessionService.updateConversation(session, currentQuery, answer, chatResponse, queryContext);
 		conversationSessionService.persistOrUpdateSession(session);
 
 		return chatResponse;
@@ -126,14 +128,14 @@ public class ChatController {
 	/**
 	 * Creates a response for invalid or out-of-domain queries.
 	 *
-	 * @return A ChatResponseDTO with an appropriate message.
+	 * @param language the query language
+	 * @return a {@code ChatResponseDTO} with an appropriate invalid query message
 	 */
 	private ChatResponseDTO createInvalidQueryResponse(final QueryLanguage language) {
 		final ChatMessageText chatMessageText = new ChatMessageText();
-		if (language.equals(QueryLanguage.GERMAN)) {
+		if (QueryLanguage.GERMAN.equals(language)) {
 			chatMessageText.setValue(DE_INVALID_QUERY_MESSAGE);
-		}
-		else {
+		} else {
 			chatMessageText.setValue(EN_INVALID_QUERY_MESSAGE);
 		}
 
@@ -148,32 +150,34 @@ public class ChatController {
 	/**
 	 * Validates the incoming chat request.
 	 *
-	 * @param request
-	 *     The chat request DTO.
+	 * @param request the chat request DTO; must not be null and must contain messages
 	 */
 	private void validateRequest(final ChatRequestDTO request) {
 		Objects.requireNonNull(request, "ChatRequest must not be null.");
 		Objects.requireNonNull(request.getMessages(), "Messages list must not be null.");
-
 		validateDomains(request);
 	}
 
+	/**
+	 * Validates the domain information of the chat request.
+	 *
+	 * @param request the chat request DTO containing domain information
+	 */
 	private void validateDomains(final ChatRequestDTO request) {
 		if (request.getDomainsOfInterest() == null) {
-			throw new IllegalArgumentException(
-					KnowledgeRetrievalErrorCode.MISSING_DOMAINS_OF_INTEREST);
+			throw new IllegalArgumentException(KnowledgeRetrievalErrorCode.MISSING_DOMAINS_OF_INTEREST);
 		} else {
-			// Pass the full request so that domainsValidator can retrieve and validate existing document IDs.
+			// Validate that at least one domain is evaluable.
 			domainsValidator.atLeastOneDomainEvaluable(request);
 		}
 	}
 
 	/**
-	 * Retrieves document IDs based on the provided request.
+	 * Retrieves the related document mapping based on the provided request.
 	 *
-	 * @param request
-	 *     The chat request DTO.
-	 * @return A list of document IDs.
+	 * @param request the chat request DTO
+	 * @return a {@code Map} of document IDs and their corresponding labels
+	 * @throws RuntimeException if there is an IO failure in document retrieval
 	 */
 	private Map<String, String> getRelatedDocumentMap(final ChatRequestDTO request) {
 		try {
@@ -184,16 +188,15 @@ public class ChatController {
 	}
 
 	/**
-	 * Extracts the latest user query from the provided list of messages.
+	 * Extracts the latest user query from the list of chat messages.
 	 *
-	 * @param messages
-	 *     The list of chat messages.
-	 * @return The latest user query as a String.
+	 * @param messages the list of chat messages
+	 * @return the latest user query as a String; returns an empty String if none found
 	 */
 	private String extractLatestUserQuery(final List<ChatMessage> messages) {
 		return messages.stream()
 				.filter(Objects::nonNull)
-				.filter(m -> ChatRole.USER.equals(m.getRole()) && m.getContent() != null)
+				.filter(message -> ChatRole.USER.equals(message.getRole()) && message.getContent() != null)
 				.map(ChatMessage::getContent)
 				.reduce((first, second) -> second)
 				.orElse("");
