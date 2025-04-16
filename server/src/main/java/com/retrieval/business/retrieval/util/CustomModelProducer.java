@@ -20,7 +20,7 @@ public class CustomModelProducer {
 		final double temperature = 0.3; // shall be configurable later
 		return AzureOpenAiChatModel.builder()
 				.apiKey(getRequiredConfig("AZURE_OPENAI_API_KEY_GERMANY"))
-				.endpoint(getRequiredConfig("AZURE_OPENAI_ENDPOINT_GERMANY"))
+				.endpoint(getRequiredConfig("AZURE_OPENAI_ENDPOINT"))
 				.deploymentName(getRequiredConfig("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME"))
 				.temperature(temperature)
 				.logRequestsAndResponses(true)
@@ -40,7 +40,7 @@ public class CustomModelProducer {
 		final double temperature = 0.5; // shall be configurable later
 		return AzureOpenAiChatModel.builder()
 				.apiKey(getRequiredConfig("AZURE_OPENAI_API_KEY_GERMANY"))
-				.endpoint(getRequiredConfig("AZURE_OPENAI_ENDPOINT_GERMANY"))
+				.endpoint(getRequiredConfig("AZURE_OPENAI_ENDPOINT"))
 				.deploymentName(getRequiredConfig("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME"))
 				.temperature(temperature)
 				.strictJsonSchema(true) // Enable strict JSON schema adherence
