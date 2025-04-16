@@ -73,6 +73,15 @@ services:
     depends_on:
       - database-postgresql
 
+  streamlit-frontend:
+    build:
+      context: ./streamlit-fe
+    container_name: streamlit-frontend
+    ports:
+      - "8501:8501"
+    depends_on:
+      - quarkus-backend
+
 # Declare named volumes here
 volumes:
   pgvector_data:
