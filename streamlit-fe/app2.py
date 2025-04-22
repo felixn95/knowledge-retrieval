@@ -197,7 +197,7 @@ def display_chat():
 # Anfrage senden + Neue Konversation starten
 col_ask, col_reset = st.columns([2, 3])
 with col_ask:
-    if st.button("🚀 Ask now"):
+    if st.button("🚀 Anfrage senden"):
         user_question = st.session_state["user_question"].strip()
         if not user_question:
             st.warning("Bitte geben Sie eine Frage ein.")
@@ -214,7 +214,9 @@ with col_ask:
             }
 
             try:
-                response = requests.post("http://localhost:12100/knowledge-retrieval/api/default/query/chat", json=payload)
+                #response = requests.post("http://localhost:12100/knowledge-retrieval/api/default/query/chat", json=payload)
+               # use within docker-compose
+               response = requests.post("http://quarkus-backend:12100/knowledge-retrieval/api/default/query/chat", json=payload)
                 if response.status_code == 200:
                     data = response.json()
                     answer_text = data["responses"][0]["text"][0]["value"]
