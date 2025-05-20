@@ -4,9 +4,8 @@ import re
 import streamlit as st
 
 # Streamlit Layout & UI
-# ----------------------------
 st.set_page_config(page_title="Policy-Agent", layout="wide")
-# ----------------------------
+
 # Produktwahl
 st.markdown("""
 <div style='
@@ -27,9 +26,7 @@ product_options = {
 selected_product = st.selectbox("", list(product_options.keys()))
 product_key = product_options[selected_product]
 
-# ----------------------------
 # Konfigurationsdaten je Produkt
-# ----------------------------
 if product_key == "gdv":
     DEFAULT_PROMPTS = [
         "Der Kunde hat seinen Firmen-Schlüssel verloren. Sind Ansprüche aus beruflichen Tätigkeiten hier abgedeckt?",
@@ -67,8 +64,7 @@ elif product_key == "au":
         "VIT": "VIT",
         "DYNAMIK": "DYNAMIK"
     }
-    GENERAL_DOMAINS = {}  # Keine allgemeinen Bereiche bei AU
-
+    GENERAL_DOMAINS = {}
 
 # Chat CSS
 st.markdown("""
@@ -105,10 +101,8 @@ st.title("Hi, ich bin dein Vertrags-Agent")
 st.subheader(f"Produkt: {selected_product}")
 st.markdown("##### Wähle die Bereiche, die für deine Abfrage relevant sind:")
 
-# Drei Spalten für Verträge, Module, allgemeine Bereiche
 col1, col2, col3 = st.columns(3)
 
-# Verträge
 with col1:
     st.write("### Verträge")
     selected_contracts = []
@@ -116,7 +110,6 @@ with col1:
         if st.checkbox(contract_label, key=f"contract_{contract_key}"):
             selected_contracts.append({"contractKey": contract_key})
 
-# Vertragsbausteine / Zusatzvereinbarungen
 with col2:
     st.write("### Vertragsbausteine / Zusatzvereinbarungen")
     selected_modules = []
@@ -124,7 +117,6 @@ with col2:
         if st.checkbox(module_label, key=f"module_{module_key}"):
             selected_modules.append({"moduleKey": module_key})
 
-# Allgemeine Bereiche
 with col3:
     st.write("### Allgemeine Bereiche")
     selected_general_domains = []
@@ -147,7 +139,6 @@ if "chat_history" not in st.session_state:
 if "user_question" not in st.session_state:
     st.session_state["user_question"] = ""
 
-# Eingabefeld
 any_selection = selected_contracts or selected_modules or selected_general_domains
 if any_selection:
     st.session_state["user_question"] = st.text_input(
@@ -159,7 +150,6 @@ else:
     st.info("Bitte wähle mindestens einen Bereich aus, um eine Frage stellen zu können.")
     st.session_state["user_question"] = ""
 
-# Domains-Objekt für API
 domains_of_interest = {
     "productKey": product_payload_key,
     "contracts": selected_contracts,
@@ -214,9 +204,11 @@ with col_ask:
             }
 
             try:
-                #response = requests.post("http://localhost:12100/knowledge-retrieval/api/default/query/chat", json=payload)
-               # use within docker-compose
-               response = requests.post("http://quarkus-backend:12100/knowledge-retrieval/api/default/query/chat", json=payload)
+                # response = requests.post("http://localhost:12100/knowledge-retrieval/api/default/query/chat", json=payload)
+                response = requests.post(
+                    "http://quarkus-backend:12100/knowledge-retrieval/api/default/query/chat",
+                    json=payload
+                )
                 if response.status_code == 200:
                     data = response.json()
                     answer_text = data["responses"][0]["text"][0]["value"]
